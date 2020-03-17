@@ -6,8 +6,10 @@ import requests
 import json
 
 SERVER_URL = 'http://127.0.0.1:5000/air'
+COM = 'COM3'
+BAUD = 9600
 
-ser = serial.Serial("COM3", 9600, timeout = 5)
+ser = serial.Serial(COM, BAUD, timeout = 5)
 ser.flushInput()
 
 def main():

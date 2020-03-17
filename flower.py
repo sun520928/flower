@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import json
 import datetime
+import logging
 
 from flask import Flask, request
 import logging
@@ -8,6 +9,7 @@ import logging
 import pymysql
 pymysql.install_as_MySQLdb()
 from flask_sqlalchemy import SQLAlchemy
+
 
 DB_USER = 'flower'
 DB_PWD  = 'flower'
@@ -61,7 +63,7 @@ def air():
 	ret['result'] = {}
 
 	data_str = request.get_data()
-	print(data_str)
+	app.logger.debug('recv POST: %s' % data_str)
 	data = json.loads(data_str.decode("utf-8"))
 
 	if request.method =='POST':
@@ -71,9 +73,9 @@ def air():
 
 		if humidity and fahrenheit and celsius:
 			air = Air(humidity, fahrenheit, celsius)
-			print(air)
 			db.session.add(air)
 			db.session.commit()
+			app.logger.info('add air success.Air=%s' % air)
 	else:
 		begin_date = data.get("begin")
 		end_date = data.get("end")
